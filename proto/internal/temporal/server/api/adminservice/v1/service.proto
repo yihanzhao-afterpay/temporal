@@ -84,6 +84,11 @@ service AdminService {
     rpc DescribeCluster(DescribeClusterRequest) returns (DescribeClusterResponse) {
     }
 
+
+    // GetClusterMembers returns information about Temporal cluster members.
+    rpc GetClusterMembers(GetClusterMembersRequest) returns (GetClusterMembersResponse) {
+    }
+
     // GetDLQMessages returns messages from DLQ.
     rpc GetDLQMessages(GetDLQMessagesRequest) returns (GetDLQMessagesResponse) {
     }

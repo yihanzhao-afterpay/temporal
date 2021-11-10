@@ -967,7 +967,7 @@ type (
 		Version int64
 	}
 
-	// GetClusterMembersRequest is the response to GetClusterMembers
+	// GetClusterMembersRequest is the request to GetClusterMembers
 	GetClusterMembersRequest struct {
 		LastHeartbeatWithin time.Duration
 		RPCAddressEquals    net.IP

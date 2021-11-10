@@ -507,6 +507,8 @@ const (
 	AdminClientGetWorkflowExecutionRawHistoryV2Scope
 	// AdminClientDescribeClusterScope tracks RPC calls to admin service
 	AdminClientDescribeClusterScope
+	// AdminClientGetClusterMembersScope tracks RPC calls to admin service
+	AdminClientGetClusterMembersScope
 	// AdminClientGetDLQMessagesScope tracks RPC calls to admin service
 	AdminClientGetDLQMessagesScope
 	// AdminClientPurgeDLQMessagesScope tracks RPC calls to admin service
@@ -717,6 +719,8 @@ const (
 	AdminPurgeDLQMessagesScope
 	// AdminMergeDLQMessagesScope is the metric scope for admin.AdminMergeDLQMessagesScope
 	AdminMergeDLQMessagesScope
+	// AdminGetClusterMembersScope is the metric scope for admin.AdminGetClusterMembersScope
+	AdminGetClusterMembersScope
 
 	NumAdminScopes
 )
@@ -1393,6 +1397,7 @@ var ScopeDefs = map[ServiceIdx]map[int]scopeDefinition{
 		AdminGetWorkflowExecutionRawHistoryScope:   {operation: "GetWorkflowExecutionRawHistory"},
 		AdminGetWorkflowExecutionRawHistoryV2Scope: {operation: "GetWorkflowExecutionRawHistoryV2"},
 		AdminGetReplicationMessagesScope:           {operation: "GetReplicationMessages"},
+		AdminGetClusterMembersScope:                {operation: "AdminGetClusterMembersScope"},
 		AdminGetNamespaceReplicationMessagesScope:  {operation: "GetNamespaceReplicationMessages"},
 		AdminGetDLQReplicationMessagesScope:        {operation: "AdminGetDLQReplicationMessages"},
 		AdminReapplyEventsScope:                    {operation: "ReapplyEvents"},

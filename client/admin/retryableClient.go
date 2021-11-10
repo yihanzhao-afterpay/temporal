@@ -210,6 +210,22 @@ func (c *retryableClient) DescribeCluster(
 	return resp, err
 }
 
+func (c *retryableClient) GetClusterMembers(
+	ctx context.Context,
+	request *adminservice.GetClusterMembersRequest,
+	opts ...grpc.CallOption,
+) (*adminservice.GetClusterMembersResponse, error) {
+
+	var resp *adminservice.GetClusterMembersResponse
+	op := func() error {
+		var err error
+		resp, err = c.client.GetClusterMembers(ctx, request, opts...)
+		return err
+	}
+	err := backoff.Retry(op, c.policy, c.isRetryable)
+	return resp, err
+}
+
 func (c *retryableClient) GetReplicationMessages(
 	ctx context.Context,
 	request *adminservice.GetReplicationMessagesRequest,

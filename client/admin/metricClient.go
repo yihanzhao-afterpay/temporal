@@ -228,6 +228,24 @@ func (c *metricClient) DescribeCluster(
 	return resp, err
 }
 
+func (c *metricClient) GetClusterMembers(
+	ctx context.Context,
+	request *adminservice.GetClusterMembersRequest,
+	opts ...grpc.CallOption,
+) (*adminservice.GetClusterMembersResponse, error) {
+
+	c.metricsClient.IncCounter(metrics.AdminClientGetClusterMembersScope, metrics.ClientRequests)
+
+	sw := c.metricsClient.StartTimer(metrics.AdminClientGetClusterMembersScope, metrics.ClientLatency)
+	resp, err := c.client.GetClusterMembers(ctx, request, opts...)
+	sw.Stop()
+
+	if err != nil {
+		c.metricsClient.IncCounter(metrics.AdminClientGetClusterMembersScope, metrics.ClientFailures)
+	}
+	return resp, err
+}
+
 func (c *metricClient) GetReplicationMessages(
 	ctx context.Context,
 	request *adminservice.GetReplicationMessagesRequest,

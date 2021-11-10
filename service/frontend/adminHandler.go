@@ -672,6 +672,42 @@ func (adh *AdminHandler) DescribeCluster(_ context.Context, _ *adminservice.Desc
 	}, nil
 }
 
+func (adh *AdminHandler) GetClusterMembers(
+	ctx context.Context,
+	request *adminservice.GetClusterMembersRequest,
+) (_ *adminservice.GetClusterMembersResponse, retError error) {
+	defer log.CapturePanic(adh.GetLogger(), &retError)
+
+	scope, sw := adh.startRequestProfile(metrics.AdminGetClusterMembersScope)
+	defer sw.Stop()
+
+	if request == nil {
+		return nil, adh.error(errRequestNotSet, scope)
+	}
+
+	metadataMgr := adh.GetClusterMetadataManager()
+
+	resp, err := metadataMgr.GetClusterMembers(&persistence.GetClusterMembersRequest{NextPageToken: nil})
+
+	var activeMembers []*clusterspb.ClusterMember
+	for _, member := range resp.ActiveMembers {
+		activeMembers = append(activeMembers, &clusterspb.ClusterMember{
+			Role:             enumsspb.ClusterMemberRole(member.Role),
+			HostId:           member.HostID.String(),
+			RpcAddress:       member.RPCAddress.String(),
+			RpcPort:          int32(member.RPCPort),
+			SessionStartTime: &member.SessionStart,
+			LastHeartbitTime: &member.LastHeartbeat,
+			RecordExpiryTime: &member.RecordExpiry,
+		})
+	}
+
+	return &adminservice.GetClusterMembersResponse{
+		ActiveMembers: activeMembers,
+		NextPageToken: resp.NextPageToken,
+	}, err
+}
+
 // GetReplicationMessages returns new replication tasks since the read level provided in the token.
 func (adh *AdminHandler) GetReplicationMessages(ctx context.Context, request *adminservice.GetReplicationMessagesRequest) (_ *adminservice.GetReplicationMessagesResponse, retError error) {
 	defer log.CapturePanic(adh.GetLogger(), &retError)

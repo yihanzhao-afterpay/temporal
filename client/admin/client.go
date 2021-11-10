@@ -203,6 +203,20 @@ func (c *clientImpl) DescribeCluster(
 	return client.DescribeCluster(ctx, request, opts...)
 }
 
+func (c *clientImpl) GetClusterMembers(
+	ctx context.Context,
+	request *adminservice.GetClusterMembersRequest,
+	opts ...grpc.CallOption,
+) (*adminservice.GetClusterMembersResponse, error) {
+	client, err := c.getRandomClient()
+	if err != nil {
+		return nil, err
+	}
+	ctx, cancel := c.createContext(ctx)
+	defer cancel()
+	return client.GetClusterMembers(ctx, request, opts...)
+}
+
 func (c *clientImpl) GetReplicationMessages(
 	ctx context.Context,
 	request *adminservice.GetReplicationMessagesRequest,
